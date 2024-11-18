@@ -1,0 +1,2 @@
+insert into item (name, price, description) values ('Round Widget Test', 6.99, 'A widget that is round');
+insert into item (name, price, description) values ('Square Widget Test', 6.99, 'A widget that is square');
