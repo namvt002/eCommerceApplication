@@ -4,6 +4,7 @@ package com.example.demo.security;
 import com.example.demo.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 // Static imports for constant URLs for sign-in and sign-up
 import static com.example.demo.util.Constant.SIGN_IN_URL;
@@ -49,7 +51,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))  // Add a filter to handle authentication with JWT (for login requests)
                 .addFilter(new JWTAuthenticationVerificationFilter(authenticationManager()))  // Add a filter to handle authentication verification with JWT (for each request)
                 .sessionManagement()  // Configure session management
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);  // Use stateless session management (since JWTs are stateless, no server-side session storage)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);// Use stateless session management (since JWTs are stateless, no server-side session storage)
+        http.exceptionHandling() .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+
     }
 
     // Configure the AuthenticationManagerBuilder to set up custom user details service and password encoder
